@@ -18,8 +18,8 @@ const newAdobeScriptFileCreator = (config: Config): AdobeScriptCreator => {
     const adobeScriptsPath: string = config.app.adobeScriptsPath || defaults.adobeScriptsPath;
     const scriptBuilder: AdobeScriptBuilder = newAdobeScriptBuilder();
 
-    const createFile = (command: string, content: string): Promise<string> => new Promise((resolve, reject) => {
-        const filePath: string = path.join(adobeScriptsPath, `${command}.${scriptingExtension.get(appName)}`);
+    const createFile = (commandName: string, content: string): Promise<string> => new Promise((resolve, reject) => {
+        const filePath: string = path.join(adobeScriptsPath, `${commandName}.${scriptingExtension.get(appName)}`);
         const fileDirname: string = path.dirname(filePath);
         if(fs.existsSync(fileDirname)) {
             fs.writeFile(filePath, content, "utf-8", (err) => {
@@ -41,14 +41,15 @@ const newAdobeScriptFileCreator = (config: Config): AdobeScriptCreator => {
     return {
         create: (command: string, body: string, args?: Options): Promise<string> =>
             new Promise((resolve, reject) => {
-                const broadcast: string = buildBroadcastScript(command);
+                const commandName: string = path.basename(command).replace(/\.\w+$/,'');
+                const broadcast: string = buildBroadcastScript(commandName);
                 const content: string = scriptBuilder
-                    .setName(command)
+                    .setName(commandName)
                     .setVariables(args)
                     .setBody(body)
                     .setBroadcast(broadcast)
                     .build();
-                return createFile(command, content).then(resolve).catch(reject);
+                return createFile(commandName, content).then(resolve).catch(reject);
             })
     }
 }
