@@ -10,6 +10,7 @@ export const newScriptReader = (config: Config): ScriptReader => {
             const builtInScript: string = path.join(__dirname, '..', '..', 'scripts', appName, `${command}.js`);
             if (fs.existsSync(builtInScript)) {
                 console.info(`Built-in Script file found: ${builtInScript}`);
+                console.log(fs.readFileSync(builtInScript).toString());
                 return fs.readFileSync(builtInScript).toString();
             }
             console.error(`Built-in script file not found: ${builtInScript}`);

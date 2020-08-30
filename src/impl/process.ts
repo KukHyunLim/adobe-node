@@ -31,6 +31,7 @@ const newAdobeAppProcess = ({app: { path: appPath }, host, port}: Config, option
       process.kill();
     },
     run:(commandPath: string): void => {
+      console.log(`${openCmd} ${appPath.replace(/ /g, "\\ ")} ${commandPath.replace(/ /g, "\\ ")}`);
       exec(`${openCmd} ${appPath.replace(/ /g, "\\ ")} ${commandPath.replace(/ /g, "\\ ")}`);
     }
   }

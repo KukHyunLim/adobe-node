@@ -25,6 +25,7 @@ export const newAdobeApp = (config: Config, timeoutCallback?: Function): AdobeAp
       new Promise(async (resolve, reject) => {
         const commandPath: string = await scriptCreator.create(command, body, options);
         commandStack.push({ command, resolve, reject });
+        console.log(commandPath);
         appProcess.run(commandPath);
       })
 
